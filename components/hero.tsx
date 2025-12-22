@@ -279,16 +279,16 @@ export function Hero({ onAnalyze, error }: HeroProps) {
                             </button>
 
                             {/* Video Iframe (Placeholder) */}
-                            <iframe
+                            <video
                                 width="100%"
                                 height="100%"
-                                src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
-                                title="How checktos works"
-                                frameBorder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowFullScreen
-                                className="w-full h-full"
-                            />
+                                controls
+                                autoPlay
+                                className="w-full h-full object-cover"
+                            >
+                                <source src="/video/preview.mp4" type="video/mp4" />
+                                Your browser does not support the video tag.
+                            </video>
                         </motion.div>
                     </motion.div>
                 )}
