@@ -165,8 +165,10 @@ export async function POST(req: NextRequest) {
     }
 
     if (!jsonResponseText) {
+      // Log full errors for monitoring, but show friendly message to user
+      console.error("All AI providers failed:", providerErrors);
       return NextResponse.json(
-        { error: `Analysis failed. Both AI providers failed. Errors: ${providerErrors.join(", ")}` },
+        { error: "Service is temporarily busy. We will be back shortly." },
         { status: 503 }
       );
     }
