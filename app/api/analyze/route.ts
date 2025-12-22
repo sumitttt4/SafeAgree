@@ -1,10 +1,7 @@
 import Groq from "groq-sdk";
+import OpenAI from "openai";
 import { NextRequest, NextResponse } from "next/server";
 import { POPULAR_APPS } from "@/lib/popular-apps";
-
-const groq = new Groq({
-  apiKey: process.env.GROQ_API_KEY,
-});
 
 const SYSTEM_PROMPT = `You are SafeAgree, an AI legal document analyzer. Your job is to analyze Terms of Service, Privacy Policies, and Contracts to identify potential risks and benefits for the user.
 
@@ -43,6 +40,18 @@ Guidelines:
 
 export async function POST(req: NextRequest) {
   try {
+    // Initialize Clients Lazily
+    const groqApiKey = process.env.GROQ_API_KEY;
+    const sambanovaApiKey = process.env.SAMBANOVA_API_KEY;
+
+    const groq = groqApiKey ? new Groq({ apiKey: groqApiKey }) : null;
+
+    // OpenAI client for SambaNova
+    const sambanova = sambanovaApiKey ? new OpenAI({
+      apiKey: sambanovaApiKey,
+      baseURL: "https://api.sambanova.ai/v1",
+    }) : null;
+
     const { content, type } = await req.json();
 
     if (!content) {
@@ -53,10 +62,7 @@ export async function POST(req: NextRequest) {
     }
 
     // CHECK FOR POPULAR APPS (Pre-computed data)
-    // Only check if it's a URL or a short string (likely a user typing "facebook")
-    // If it's a long text block, we should ALWAYS analyze it with AI.
     let matchedKey: string | undefined;
-
     if (type === "url" || content.length < 100) {
       const lowerContent = content.toLowerCase();
       matchedKey = Object.keys(POPULAR_APPS).find(key => lowerContent.includes(key));
@@ -64,106 +70,102 @@ export async function POST(req: NextRequest) {
 
     if (matchedKey) {
       console.log(`Matched popular app: ${matchedKey}, returning pre-computed result.`);
-      // Simulate a small network delay for realism
       await new Promise(resolve => setTimeout(resolve, 800));
       return NextResponse.json(POPULAR_APPS[matchedKey]);
     }
 
-    if (!process.env.GROQ_API_KEY) {
-      console.error("GROQ_API_KEY is not set");
-      return NextResponse.json(
-        { error: "Groq API key not configured. Please add GROQ_API_KEY to .env.local" },
-        { status: 500 }
-      );
-    }
-
     let textToAnalyze = content;
 
-    // If it's a URL, fetch the content first
+    // URL Fetching Logic
     if (type === "url") {
       try {
         console.log("Fetching URL:", content);
         const response = await fetch(content, {
-          headers: {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-          }
+          headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' }
         });
 
-        if (!response.ok) {
-          return NextResponse.json(
-            { error: `Could not fetch URL (${response.status}). Try using Text mode instead.` },
-            { status: 400 }
-          );
-        }
-
+        if (!response.ok) throw new Error(`Status ${response.status}`);
         textToAnalyze = await response.text();
-        // Basic HTML stripping
         textToAnalyze = textToAnalyze.replace(/<[^>]*>/g, " ").slice(0, 50000);
-        console.log("Fetched text length:", textToAnalyze.length);
       } catch (fetchError) {
         console.error("Fetch error:", fetchError);
         return NextResponse.json(
-          { error: "Could not fetch URL. The website may be blocking requests. Try using Text mode." },
+          { error: "Could not fetch URL. Try using Text mode." },
           { status: 400 }
         );
       }
     }
 
     if (textToAnalyze.length < 100) {
+      return NextResponse.json({ error: "Content too short." }, { status: 400 });
+    }
+
+    // --- AI GENERATION LOGIC WITH FAILOVER ---
+    let jsonResponseText: string | null | undefined = null;
+
+    // 1. Try Groq
+    try {
+      if (!groq) throw new Error("GROQ_API_KEY missing");
+      console.log("Attempting analysis with Groq (Llama-3.1-8b-instant)...");
+
+      const chatCompletion = await groq.chat.completions.create({
+        messages: [
+          { role: "system", content: SYSTEM_PROMPT },
+          { role: "user", content: `Analyze this document:\n\n${textToAnalyze.slice(0, 25000)}` },
+        ],
+        model: "llama-3.1-8b-instant",
+        temperature: 0,
+        max_tokens: 2048,
+      });
+
+      jsonResponseText = chatCompletion.choices[0]?.message?.content;
+      console.log("Groq success.");
+    } catch (groqError) {
+      console.error("Groq failed:", groqError instanceof Error ? groqError.message : groqError);
+
+      // 2. Failover to SambaNova
+      if (sambanova) {
+        console.log("Failing over to SambaNova (Meta-Llama-3.1-70B-Instruct)...");
+        try {
+          const completion = await sambanova.chat.completions.create({
+            model: "Meta-Llama-3.1-70B-Instruct",
+            messages: [
+              { role: "system", content: SYSTEM_PROMPT },
+              { role: "user", content: `Analyze this document:\n\n${textToAnalyze.slice(0, 25000)}` },
+            ],
+            temperature: 0.1,
+            top_p: 0.1,
+          });
+          jsonResponseText = completion.choices[0]?.message?.content;
+          console.log("SambaNova success.");
+        } catch (sambaError) {
+          console.error("SambaNova failed:", sambaError instanceof Error ? sambaError.message : sambaError);
+        }
+      } else {
+        console.warn("SAMBANOVA_API_KEY not found or client init failed, skipping failover.");
+      }
+    }
+
+    if (!jsonResponseText) {
       return NextResponse.json(
-        { error: "Content too short. Please provide more text to analyze." },
-        { status: 400 }
+        { error: "Analysis failed. Both AI providers are temporarily unavailable." },
+        { status: 503 }
       );
     }
 
-    console.log("Calling Groq API with Llama...");
-
-    const chatCompletion = await groq.chat.completions.create({
-      messages: [
-        {
-          role: "system",
-          content: SYSTEM_PROMPT,
-        },
-        {
-          role: "user",
-          content: `Analyze this document:\n\n${textToAnalyze.slice(0, 25000)}`,
-        },
-      ],
-      model: "llama-3.1-8b-instant",
-      temperature: 0,
-      max_tokens: 2048,
-    });
-
-    const text = chatCompletion.choices[0]?.message?.content;
-    console.log("Groq response received");
-
-    if (!text) {
-      return NextResponse.json(
-        { error: "Empty response from AI" },
-        { status: 500 }
-      );
-    }
-
-    // Parse the JSON response
-    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    // Parse JSON
+    const jsonMatch = jsonResponseText.match(/\{[\s\S]*\}/);
     if (!jsonMatch) {
-      console.error("Failed to parse JSON from:", text.slice(0, 200));
-      return NextResponse.json(
-        { error: "Failed to parse AI response" },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: "Failed to parse AI response" }, { status: 500 });
     }
 
     const analysis = JSON.parse(jsonMatch[0]);
-    console.log("Analysis complete, score:", analysis.score);
-
     return NextResponse.json(analysis);
 
   } catch (error) {
-    console.error("Analysis error:", error);
-    const message = error instanceof Error ? error.message : "Unknown error";
+    console.error("Handler error:", error);
     return NextResponse.json(
-      { error: `Analysis failed: ${message}` },
+      { error: "Internal server error" },
       { status: 500 }
     );
   }
