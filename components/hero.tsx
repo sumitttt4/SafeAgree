@@ -57,7 +57,7 @@ export function Hero({ onAnalyze, error }: HeroProps) {
                 }}
             />
 
-            <div className="max-w-4xl mx-auto px-6 relative z-10">
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 relative z-10">
                 <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -66,7 +66,7 @@ export function Hero({ onAnalyze, error }: HeroProps) {
                 >
 
                     {/* Headline */}
-                    <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold tracking-tight text-slate-900 mb-6 leading-[1.1]">
+                    <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold tracking-tight text-slate-900 mb-6 leading-[1.1]">
                         Don't just click <br className="hidden md:block" />
                         <span className="relative inline-block">
                             <span className="relative z-10 text-transparent bg-clip-text bg-gradient-to-b from-slate-800 to-slate-900">
@@ -80,7 +80,7 @@ export function Hero({ onAnalyze, error }: HeroProps) {
                     </h1>
 
                     {/* Subtext */}
-                    <p className="text-lg text-slate-600 mb-10 max-w-xl mx-auto leading-relaxed">
+                    <p className="text-base sm:text-lg text-slate-600 mb-10 max-w-xl mx-auto leading-relaxed">
                         SafeAgree scans Terms of Service in seconds, finding the traps you'd otherwise miss.
                     </p>
 
@@ -155,7 +155,7 @@ export function Hero({ onAnalyze, error }: HeroProps) {
                                             value={url}
                                             onChange={(e) => setUrl(e.target.value)}
                                             placeholder="https://example.com/terms"
-                                            className="flex-1 bg-transparent outline-none text-slate-900 placeholder:text-slate-400 px-4 h-12 text-base font-medium"
+                                            className="flex-1 bg-transparent outline-none text-slate-900 placeholder:text-slate-400 px-4 h-12 text-base font-medium min-w-0" // Added min-w-0 for flex child
                                             onKeyDown={(e) => {
                                                 if (e.key === "Enter") {
                                                     handleSubmit();
@@ -167,7 +167,7 @@ export function Hero({ onAnalyze, error }: HeroProps) {
                                         {url && (
                                             <button
                                                 onClick={handleClear}
-                                                className="p-2 text-slate-400 hover:text-slate-600 transition-colors mr-2"
+                                                className="p-2 text-slate-400 hover:text-slate-600 transition-colors mr-2 shrink-0"
                                             >
                                                 <X className="w-4 h-4" />
                                             </button>
@@ -176,7 +176,7 @@ export function Hero({ onAnalyze, error }: HeroProps) {
                                         {/* Analyze Button */}
                                         <Button
                                             onClick={handleSubmit}
-                                            className="bg-[#FDE047] text-slate-900 px-6 py-3 rounded-xl font-bold text-sm hover:bg-[#fcd34d] shadow-sm transition-transform active:scale-95 h-auto border-none"
+                                            className="bg-[#FDE047] text-slate-900 px-6 py-3 rounded-xl font-bold text-sm hover:bg-[#fcd34d] shadow-sm transition-transform active:scale-95 h-auto border-none shrink-0"
                                         >
                                             Analyze
                                         </Button>
@@ -195,8 +195,8 @@ export function Hero({ onAnalyze, error }: HeroProps) {
                                                 value={text}
                                                 onChange={(e) => setText(e.target.value.slice(0, MAX_CHARS))}
                                                 placeholder="Paste up to 50,000 words... Terms of Service, Privacy Policy, or any contract text here..."
-                                                rows={6}
-                                                className="w-full bg-slate-50/50 rounded-xl p-4 text-sm font-medium text-slate-900 placeholder:text-slate-400 focus:outline-none focus:bg-white transition-colors resize-none mb-2"
+                                                rows={4} // Default to 4 rows for mobile
+                                                className="w-full bg-slate-50/50 rounded-xl p-4 text-sm font-medium text-slate-900 placeholder:text-slate-400 focus:outline-none focus:bg-white transition-colors resize-none mb-2 md:h-auto min-h-[120px] md:min-h-[160px]" // Responsive height
                                                 onKeyDown={(e) => {
                                                     if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
                                                         handleSubmit();
