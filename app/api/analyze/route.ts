@@ -85,8 +85,19 @@ export async function POST(req: NextRequest) {
         });
 
         if (!response.ok) throw new Error(`Status ${response.status}`);
-        textToAnalyze = await response.text();
-        textToAnalyze = textToAnalyze.replace(/<[^>]*>/g, " ").slice(0, 50000);
+        const html = await response.text();
+
+        // Remove script and style elements content specifically
+        let cleanText = html.replace(/<script\b[^>]*>([\s\S]*?)<\/script>/gim, "")
+          .replace(/<style\b[^>]*>([\s\S]*?)<\/style>/gim, "");
+
+        // Strip remaining HTML tags
+        cleanText = cleanText.replace(/<[^>]*>/g, " ");
+
+        // Collapse multiple spaces/newlines
+        cleanText = cleanText.replace(/\s+/g, " ").trim();
+
+        textToAnalyze = cleanText.slice(0, 20000); // Limit to ~5k tokens to prevent context errors
       } catch (fetchError) {
         console.error("Fetch error:", fetchError);
         return NextResponse.json(
@@ -96,8 +107,8 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    if (textToAnalyze.length < 100) {
-      return NextResponse.json({ error: "Content too short." }, { status: 400 });
+    if (textToAnalyze.length < 50) {
+      return NextResponse.json({ error: "Content too short or could not be extracted." }, { status: 400 });
     }
 
     // --- AI GENERATION LOGIC WITH FAILOVER ---
@@ -106,16 +117,16 @@ export async function POST(req: NextRequest) {
     // 1. Try Groq
     try {
       if (!groq) throw new Error("GROQ_API_KEY missing");
-      console.log("Attempting analysis with Groq (Llama-3.1-8b-instant)...");
+      console.log("Attempting analysis with Groq (Llama-3.1-8b-instant)... Length:", textToAnalyze.length);
 
       const chatCompletion = await groq.chat.completions.create({
         messages: [
           { role: "system", content: SYSTEM_PROMPT },
-          { role: "user", content: `Analyze this document:\n\n${textToAnalyze.slice(0, 25000)}` },
+          { role: "user", content: `Analyze this document:\n\n${textToAnalyze}` },
         ],
         model: "llama-3.1-8b-instant",
         temperature: 0,
-        max_tokens: 2048,
+        max_tokens: 1024, // Reduced for speed
       });
 
       jsonResponseText = chatCompletion.choices[0]?.message?.content;
@@ -131,7 +142,7 @@ export async function POST(req: NextRequest) {
             model: "Meta-Llama-3.1-70B-Instruct",
             messages: [
               { role: "system", content: SYSTEM_PROMPT },
-              { role: "user", content: `Analyze this document:\n\n${textToAnalyze.slice(0, 25000)}` },
+              { role: "user", content: `Analyze this document:\n\n${textToAnalyze}` },
             ],
             temperature: 0.1,
             top_p: 0.1,
