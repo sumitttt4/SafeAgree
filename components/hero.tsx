@@ -66,7 +66,7 @@ export function Hero({ onAnalyze, error }: HeroProps) {
                 >
 
                     {/* Headline */}
-                    <h1 className="text-5xl lg:text-7xl font-bold tracking-tight text-slate-900 mb-6 leading-[1.1]">
+                    <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold tracking-tight text-slate-900 mb-6 leading-[1.1]">
                         Don't just click <br className="hidden md:block" />
                         <span className="relative inline-block">
                             <span className="relative z-10 text-transparent bg-clip-text bg-gradient-to-b from-slate-800 to-slate-900">
@@ -284,6 +284,8 @@ export function Hero({ onAnalyze, error }: HeroProps) {
                                 height="100%"
                                 controls
                                 autoPlay
+                                muted
+                                playsInline
                                 className="w-full h-full object-cover"
                             >
                                 <source src="/video/preview.mp4" type="video/mp4" />
