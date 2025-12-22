@@ -26,7 +26,7 @@ export function Footer() {
                             <img src="/logo-new.png" alt="SafeAgree" className="h-10 w-auto" />
                         </div>
                         <p className="text-sm text-slate-500">
-                            Made with ❤️ by <Link href="https://x.com/Sumitthq" target="_blank" className="font-semibold text-slate-700 hover:text-blue-600 transition-colors">Sumit Sharma</Link>
+                            Built by <Link href="https://x.com/Sumitthq" target="_blank" className="font-semibold text-slate-700 hover:text-blue-600 transition-colors">Sumit Sharma</Link>
                         </p>
                         <div className="flex items-center gap-4 pt-1">
                             <Link
@@ -76,8 +76,11 @@ export function Footer() {
 
                 {/* Bottom Bar */}
                 <div className="mt-12 pt-6 border-t border-slate-100 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-400">
-                    <div>
-                        © 2024 SafeAgree. All rights reserved.
+                    <div className="flex gap-4">
+                        <span>© 2025 SafeAgree. All rights reserved.</span>
+                        <Link href="/privacy" className="hover:text-slate-600 underline decoration-slate-300 underline-offset-2 transition-colors">
+                            Privacy Policy & Terms
+                        </Link>
                     </div>
                     <div className="flex items-center gap-1">
                         <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />

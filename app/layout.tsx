@@ -29,7 +29,6 @@ export default function RootLayout({
     return (
         <html lang="en" suppressHydrationWarning>
             <body className={cn(inter.variable, "min-h-screen bg-white font-sans antialiased text-slate-900")}>
-                <Navbar />
                 <main className="flex min-h-screen flex-col">
                     {children}
                 </main>

@@ -7,6 +7,7 @@ import { FeatureSection } from "@/components/feature-section";
 import { Dashboard } from "@/components/dashboard";
 import { ComparisonSection } from "@/components/comparison-section";
 import { Footer } from "@/components/footer";
+import { Navbar } from "@/components/navbar";
 import { Loader2 } from "lucide-react";
 
 interface AnalysisResult {
@@ -72,6 +73,7 @@ export default function Home() {
 
     return (
         <div className="min-h-screen bg-white">
+            <Navbar onReset={handleReset} />
             {/* Loading Overlay */}
             <AnimatePresence>
                 {isAnalyzing && (
