@@ -6,7 +6,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-const MAX_CHARS = 15000;
+const MAX_CHARS = 300000;
 
 type InputMode = "link" | "text";
 
@@ -194,7 +194,7 @@ export function Hero({ onAnalyze, error }: HeroProps) {
                                             <textarea
                                                 value={text}
                                                 onChange={(e) => setText(e.target.value.slice(0, MAX_CHARS))}
-                                                placeholder="Paste your Terms of Service, Privacy Policy, or any contract text here..."
+                                                placeholder="Paste up to 50,000 words... Terms of Service, Privacy Policy, or any contract text here..."
                                                 rows={6}
                                                 className="w-full bg-slate-50/50 rounded-xl p-4 text-sm font-medium text-slate-900 placeholder:text-slate-400 focus:outline-none focus:bg-white transition-colors resize-none mb-2"
                                                 onKeyDown={(e) => {

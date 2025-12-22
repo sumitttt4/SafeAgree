@@ -97,7 +97,8 @@ export async function POST(req: NextRequest) {
         // Collapse multiple spaces/newlines
         cleanText = cleanText.replace(/\s+/g, " ").trim();
 
-        textToAnalyze = cleanText.slice(0, 20000); // Limit to ~5k tokens to prevent context errors
+        // Limit to approx 50k words (300k chars)
+        textToAnalyze = cleanText.slice(0, 300000);
       } catch (fetchError) {
         console.error("Fetch error:", fetchError);
         return NextResponse.json(
@@ -113,6 +114,7 @@ export async function POST(req: NextRequest) {
 
     // --- AI GENERATION LOGIC WITH FAILOVER ---
     let jsonResponseText: string | null | undefined = null;
+    let providerErrors: string[] = [];
 
     // 1. Try Groq
     try {
@@ -126,13 +128,15 @@ export async function POST(req: NextRequest) {
         ],
         model: "llama-3.1-8b-instant",
         temperature: 0,
-        max_tokens: 1024, // Reduced for speed
+        max_tokens: 4096, // Increased for full analysis
       });
 
       jsonResponseText = chatCompletion.choices[0]?.message?.content;
       console.log("Groq success.");
     } catch (groqError) {
-      console.error("Groq failed:", groqError instanceof Error ? groqError.message : groqError);
+      const errMsg = groqError instanceof Error ? groqError.message : String(groqError);
+      console.error("Groq failed:", errMsg);
+      providerErrors.push(`Groq: ${errMsg}`);
 
       // 2. Failover to SambaNova
       if (sambanova) {
@@ -150,16 +154,19 @@ export async function POST(req: NextRequest) {
           jsonResponseText = completion.choices[0]?.message?.content;
           console.log("SambaNova success.");
         } catch (sambaError) {
-          console.error("SambaNova failed:", sambaError instanceof Error ? sambaError.message : sambaError);
+          const sambaErrMsg = sambaError instanceof Error ? sambaError.message : String(sambaError);
+          console.error("SambaNova failed:", sambaErrMsg);
+          providerErrors.push(`SambaNova: ${sambaErrMsg}`);
         }
       } else {
         console.warn("SAMBANOVA_API_KEY not found or client init failed, skipping failover.");
+        providerErrors.push("SambaNova: API Key missing");
       }
     }
 
     if (!jsonResponseText) {
       return NextResponse.json(
-        { error: "Analysis failed. Both AI providers are temporarily unavailable." },
+        { error: `Analysis failed. Both AI providers failed. Errors: ${providerErrors.join(", ")}` },
         { status: 503 }
       );
     }
