@@ -58,8 +58,15 @@ export default function Home() {
             const result = await response.json();
             setAnalysisResult(result);
             setShowDashboard(true);
-        } catch (err) {
-            setError(err instanceof Error ? err.message : "Something went wrong");
+        } catch (err: any) {
+            const errorMessage = err instanceof Error ? err.message : "Something went wrong";
+
+            // Sanitize raw API errors (like 429 Rate Limit)
+            if (errorMessage.includes("429") || errorMessage.includes("Rate limit") || errorMessage.includes("{")) {
+                setError("Service is temporarily busy. We will be back shortly.");
+            } else {
+                setError(errorMessage);
+            }
         } finally {
             setIsAnalyzing(false);
         }
