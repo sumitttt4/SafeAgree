@@ -74,17 +74,37 @@ export function Footer() {
 
                 </div>
 
+                {/* Disclaimer */}
+                <div className="mt-8 py-4 px-4 bg-slate-50 rounded-2xl border border-slate-100 text-center">
+                    <p className="text-xs text-slate-500 max-w-3xl mx-auto leading-relaxed">
+                        <span className="font-semibold text-slate-700">Disclaimer:</span> SafeAgree is an AI-powered analysis tool and does not provide professional legal advice. The scores and summaries generated are for informational purposes only. Always consult with a qualified attorney for legal matters.
+                    </p>
+                </div>
+
                 {/* Bottom Bar */}
-                <div className="mt-12 pt-6 border-t border-slate-100 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-400">
-                    <div className="flex gap-4">
+                <div className="mt-8 pt-6 border-t border-slate-100 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-400">
+                    <div className="flex flex-col md:flex-row gap-4 items-center">
                         <span>© 2025 SafeAgree. All rights reserved.</span>
                         <Link href="/privacy" className="hover:text-slate-600 underline decoration-slate-300 underline-offset-2 transition-colors">
                             Privacy Policy & Terms
                         </Link>
                     </div>
-                    <div className="flex items-center gap-1">
-                        <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                        <span>All systems operational</span>
+
+                    <div className="flex items-center gap-6">
+                        {/* Questions CTA */}
+                        <Link
+                            href="https://x.com/Sumitthq"
+                            target="_blank"
+                            className="flex items-center gap-1.5 text-slate-500 hover:text-blue-500 transition-colors font-medium border-r border-slate-200 pr-6"
+                        >
+                            <XIcon className="h-3.5 w-3.5" />
+                            Have questions? DM me
+                        </Link>
+
+                        <div className="flex items-center gap-1">
+                            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                            <span>All systems operational</span>
+                        </div>
                     </div>
                 </div>
 
