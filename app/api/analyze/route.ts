@@ -104,6 +104,29 @@ export async function POST(req: NextRequest) {
 
         // Limit to approx 50k words (300k chars)
         textToAnalyze = cleanText.slice(0, 300000);
+
+        // Fallback: If content is too short (likely SPA/JS-only), try Jina.ai Reader
+        if (textToAnalyze.length < 500) {
+          console.log("Direct fetch yielded low content. Attempting Jina.ai Reader fallback...");
+          try {
+            const jinaResponse = await fetch(`https://r.jina.ai/${urlToFetch}`, {
+              headers: {
+                'User-Agent': 'SafeAgree/1.0',
+                'Authorization': `Bearer ${process.env.JINA_API_KEY || ''}`
+              }
+            });
+
+            if (jinaResponse.ok) {
+              const jinaText = await jinaResponse.text();
+              if (jinaText.length > 200) {
+                console.log("Jina Reader success. Length:", jinaText.length);
+                textToAnalyze = jinaText.slice(0, 300000);
+              }
+            }
+          } catch (jinaError) {
+            console.warn("Jina fallback failed:", jinaError);
+          }
+        }
       } catch (fetchError) {
         console.error("Fetch error:", fetchError);
         return NextResponse.json(
