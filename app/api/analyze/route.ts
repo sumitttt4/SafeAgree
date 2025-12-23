@@ -196,7 +196,7 @@ export async function POST(req: NextRequest) {
       // Log full errors for monitoring, but show friendly message to user
       console.error("All AI providers failed:", providerErrors);
       return NextResponse.json(
-        { error: "Service is temporarily busy. We will be back shortly." },
+        { error: "Service is temporarily busy. Please try using Text mode: copy and paste content directly." },
         { status: 503 }
       );
     }
