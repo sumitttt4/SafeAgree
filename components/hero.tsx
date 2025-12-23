@@ -138,7 +138,7 @@ export function Hero({ onAnalyze, error }: HeroProps) {
                         {/* Input Container */}
                         <motion.div
                             layout
-                            className="relative bg-white rounded-2xl border border-slate-200 shadow-xl shadow-slate-200/40 p-2"
+                            className="relative bg-white rounded-2xl border border-slate-200 shadow-xl shadow-slate-200/40 p-1.5 sm:p-2"
                         >
                             <AnimatePresence mode="wait">
                                 {mode === "link" ? (
@@ -148,14 +148,14 @@ export function Hero({ onAnalyze, error }: HeroProps) {
                                         animate={{ opacity: 1 }}
                                         exit={{ opacity: 0 }}
                                         transition={{ duration: 0.2 }}
-                                        className="flex items-center"
+                                        className="flex items-center gap-1 sm:gap-0" // precise gap control
                                     >
                                         <input
                                             type="text"
                                             value={url}
                                             onChange={(e) => setUrl(e.target.value)}
                                             placeholder="https://example.com/terms"
-                                            className="flex-1 bg-transparent outline-none text-slate-900 placeholder:text-slate-400 px-4 h-12 text-base font-medium min-w-0" // Added min-w-0 for flex child
+                                            className="flex-1 bg-transparent outline-none text-slate-900 placeholder:text-slate-400 px-3 sm:px-4 h-10 sm:h-12 text-sm sm:text-base font-medium min-w-0"
                                             onKeyDown={(e) => {
                                                 if (e.key === "Enter") {
                                                     handleSubmit();
@@ -167,7 +167,7 @@ export function Hero({ onAnalyze, error }: HeroProps) {
                                         {url && (
                                             <button
                                                 onClick={handleClear}
-                                                className="p-2 text-slate-400 hover:text-slate-600 transition-colors mr-2 shrink-0"
+                                                className="p-1.5 sm:p-2 text-slate-400 hover:text-slate-600 transition-colors shrink-0"
                                             >
                                                 <X className="w-4 h-4" />
                                             </button>
@@ -176,7 +176,7 @@ export function Hero({ onAnalyze, error }: HeroProps) {
                                         {/* Analyze Button */}
                                         <Button
                                             onClick={handleSubmit}
-                                            className="bg-[#FDE047] text-slate-900 px-6 py-3 rounded-xl font-bold text-sm hover:bg-[#fcd34d] shadow-sm transition-transform active:scale-95 h-auto border-none shrink-0"
+                                            className="bg-[#FDE047] text-slate-900 px-4 py-2.5 sm:px-6 sm:py-3 rounded-xl font-bold text-xs sm:text-sm hover:bg-[#fcd34d] shadow-sm transition-transform active:scale-95 h-auto border-none shrink-0"
                                         >
                                             Analyze
                                         </Button>
