@@ -79,8 +79,13 @@ export async function POST(req: NextRequest) {
     // URL Fetching Logic
     if (type === "url") {
       try {
-        console.log("Fetching URL:", content);
-        const response = await fetch(content, {
+        let urlToFetch = content.trim();
+        if (!urlToFetch.startsWith("http://") && !urlToFetch.startsWith("https://")) {
+          urlToFetch = "https://" + urlToFetch;
+        }
+
+        console.log("Fetching URL:", urlToFetch);
+        const response = await fetch(urlToFetch, {
           headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' }
         });
 
