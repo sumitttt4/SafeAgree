@@ -92,14 +92,7 @@ export function Footer() {
 
                     <div className="flex items-center gap-6">
                         {/* Questions CTA */}
-                        <Link
-                            href="https://x.com/Sumitthq"
-                            target="_blank"
-                            className="flex items-center gap-1.5 text-slate-500 hover:text-blue-500 transition-colors font-medium border-r border-slate-200 pr-6"
-                        >
-                            <XIcon className="h-3.5 w-3.5" />
-                            Have questions? DM me
-                        </Link>
+
 
                         <div className="flex items-center gap-1">
                             <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
