@@ -91,10 +91,14 @@ export function Hero({ onAnalyze, error }: HeroProps) {
                             <motion.div
                                 initial={{ opacity: 0, y: -10 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                className="mb-4 flex items-center gap-2 justify-center text-red-600 text-sm font-medium"
+                                className="mb-6 p-4 bg-slate-50 border border-slate-200 rounded-xl text-center"
                             >
-                                <AlertCircle className="w-4 h-4" />
-                                {error}
+                                <p className="text-slate-800 font-semibold mb-1">
+                                    Service is temporarily busy.
+                                </p>
+                                <p className="text-slate-500 text-sm">
+                                    Please try using <span className="font-medium text-slate-700">Text mode</span>: copy and paste content directly.
+                                </p>
                             </motion.div>
                         )}
 
