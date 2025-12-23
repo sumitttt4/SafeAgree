@@ -118,12 +118,7 @@ export default function PrivacyTerms() {
                 <div className="h-px bg-slate-200 w-full my-12" />
 
                 {/* Contact */}
-                <div className="text-center space-y-2">
-                    <p className="text-slate-500 font-medium">Questions?</p>
-                    <a href="mailto:support@safeagree.com" className="text-slate-900 font-bold hover:text-blue-600 transition-colors">
-                        support@safeagree.com
-                    </a>
-                </div>
+
 
                 <div className="flex justify-center pb-20">
                     <Link href="/">
