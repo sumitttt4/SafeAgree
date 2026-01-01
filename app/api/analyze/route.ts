@@ -43,6 +43,7 @@ export async function POST(req: NextRequest) {
     // Initialize Clients Lazily
     const groqApiKey = process.env.GROQ_API_KEY;
     const sambanovaApiKey = process.env.SAMBANOVA_API_KEY;
+    const geminiApiKey = process.env.GEMINI_API_KEY;
 
     const groq = groqApiKey ? new Groq({ apiKey: groqApiKey }) : null;
 
@@ -52,7 +53,73 @@ export async function POST(req: NextRequest) {
       baseURL: "https://api.sambanova.ai/v1",
     }) : null;
 
-    const { content, type } = await req.json();
+    let content: string = "";
+    let type: string = "";
+
+    // Check if request is multipart/form-data (file upload)
+    const contentType = req.headers.get("content-type") || "";
+
+    if (contentType.includes("multipart/form-data")) {
+      // Handle file upload
+      const formData = await req.formData();
+      const file = formData.get("file") as File | null;
+      type = formData.get("type") as string || "file";
+
+      if (!file) {
+        return NextResponse.json(
+          { error: "No file provided" },
+          { status: 400 }
+        );
+      }
+
+      // Check file type
+      if (file.type !== "application/pdf") {
+        return NextResponse.json(
+          { error: "Only PDF files are supported" },
+          { status: 400 }
+        );
+      }
+
+      // Check file size (10MB limit)
+      if (file.size > 10 * 1024 * 1024) {
+        return NextResponse.json(
+          { error: "File too large. Maximum size is 10MB" },
+          { status: 400 }
+        );
+      }
+
+      // Parse PDF
+      try {
+        const arrayBuffer = await file.arrayBuffer();
+        const buffer = Buffer.from(arrayBuffer);
+
+        // Use require for pdf-parse (no ES module support)
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
+        const pdfParse = require("pdf-parse");
+        const pdfData = await pdfParse(buffer);
+        content = pdfData.text.slice(0, 300000); // Limit to 300k chars
+
+        if (content.length < 50) {
+          return NextResponse.json(
+            { error: "Could not extract text from PDF. The file may be image-based or encrypted." },
+            { status: 400 }
+          );
+        }
+
+        console.log(`Parsed PDF: ${file.name}, extracted ${content.length} characters`);
+      } catch (pdfError) {
+        console.error("PDF parsing error:", pdfError);
+        return NextResponse.json(
+          { error: "Failed to parse PDF file. Please try copying the text and using Text mode." },
+          { status: 400 }
+        );
+      }
+    } else {
+      // Handle JSON request (URL or text)
+      const body = await req.json();
+      content = body.content;
+      type = body.type;
+    }
 
     if (!content) {
       return NextResponse.json(
@@ -156,7 +223,7 @@ export async function POST(req: NextRequest) {
         ],
         model: "llama-3.1-8b-instant",
         temperature: 0,
-        max_tokens: 4096, // Increased for full analysis
+        max_tokens: 4096,
       });
 
       jsonResponseText = chatCompletion.choices[0]?.message?.content;
@@ -189,6 +256,28 @@ export async function POST(req: NextRequest) {
       } else {
         console.warn("SAMBANOVA_API_KEY not found or client init failed, skipping failover.");
         providerErrors.push("SambaNova: API Key missing");
+      }
+
+      // 3. Third failover to Google Gemini
+      if (!jsonResponseText && geminiApiKey) {
+        console.log("Failing over to Google Gemini...");
+        try {
+          const { GoogleGenerativeAI } = await import("@google/generative-ai");
+          const genAI = new GoogleGenerativeAI(geminiApiKey);
+          const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+          const result = await model.generateContent([
+            { text: SYSTEM_PROMPT },
+            { text: `Analyze this document:\n\n${textToAnalyze}` }
+          ]);
+
+          jsonResponseText = result.response.text();
+          console.log("Gemini success.");
+        } catch (geminiError) {
+          const geminiErrMsg = geminiError instanceof Error ? geminiError.message : String(geminiError);
+          console.error("Gemini failed:", geminiErrMsg);
+          providerErrors.push(`Gemini: ${geminiErrMsg}`);
+        }
       }
     }
 

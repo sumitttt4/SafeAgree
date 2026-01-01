@@ -11,7 +11,7 @@ export function FeatureSection() {
     return (
         <section id="how-it-works" className="relative py-20 md:py-24 overflow-hidden scroll-mt-24">
             {/* Background */}
-            <div className="absolute inset-0 bg-gradient-to-b from-slate-50/80 via-white to-white -z-10" />
+            <div className="absolute inset-0 bg-gradient-to-b from-slate-50/80 dark:from-slate-900/80 via-white dark:via-slate-950 to-white dark:to-slate-950 -z-10" />
 
             {/* Mesh Gradient Blob */}
             <div
@@ -28,7 +28,7 @@ export function FeatureSection() {
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 tracking-tight"
+                        className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white tracking-tight"
                     >
                         How it works.
                     </motion.h2>
@@ -37,7 +37,7 @@ export function FeatureSection() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.1 }}
-                        className="text-base md:text-lg text-slate-500 max-w-xl mx-auto"
+                        className="text-base md:text-lg text-slate-500 dark:text-slate-400 max-w-xl mx-auto"
                     >
                         Advanced AI analysis in a simple, privacy-focused package.
                     </motion.p>

@@ -26,9 +26,9 @@ export function BentoCard({
         <motion.div
             className={cn(
                 "group relative overflow-hidden rounded-3xl",
-                "bg-white border border-slate-200/80",
-                "shadow-[0_1px_1px_rgba(0,0,0,0.02),0_4px_8px_rgba(0,0,0,0.04),0_16px_32px_rgba(0,0,0,0.04)]",
-                "hover:shadow-[0_1px_1px_rgba(0,0,0,0.02),0_8px_16px_rgba(0,0,0,0.06),0_24px_48px_rgba(0,0,0,0.06)]",
+                "bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-700/80",
+                "shadow-[0_1px_1px_rgba(0,0,0,0.02),0_4px_8px_rgba(0,0,0,0.04),0_16px_32px_rgba(0,0,0,0.04)] dark:shadow-[0_1px_1px_rgba(0,0,0,0.1),0_4px_8px_rgba(0,0,0,0.2),0_16px_32px_rgba(0,0,0,0.2)]",
+                "hover:shadow-[0_1px_1px_rgba(0,0,0,0.02),0_8px_16px_rgba(0,0,0,0.06),0_24px_48px_rgba(0,0,0,0.06)] dark:hover:shadow-[0_1px_1px_rgba(0,0,0,0.1),0_8px_16px_rgba(0,0,0,0.3),0_24px_48px_rgba(0,0,0,0.3)]",
                 "transition-all duration-500 ease-out",
                 className
             )}
@@ -62,7 +62,7 @@ export function BentoCard({
             />
 
             {/* Inner Border Glow */}
-            <div className="absolute inset-px rounded-[23px] bg-gradient-to-b from-white to-slate-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0" />
+            <div className="absolute inset-px rounded-[23px] bg-gradient-to-b from-white dark:from-slate-800 to-slate-50/50 dark:to-slate-900/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0" />
 
             {/* Content */}
             <div className="relative z-10 h-full">
@@ -76,14 +76,14 @@ export function BentoHeader({ title, description, meta }: { title: string, descr
     return (
         <div className="flex flex-col gap-1.5 p-6 md:p-8 z-10 relative">
             <div className="flex items-start justify-between gap-4">
-                <h3 className="text-lg md:text-xl font-bold text-slate-900 tracking-tight">{title}</h3>
+                <h3 className="text-lg md:text-xl font-bold text-slate-900 dark:text-white tracking-tight">{title}</h3>
                 {meta && (
                     <div className="shrink-0">
                         {meta}
                     </div>
                 )}
             </div>
-            <p className="text-sm text-slate-500 leading-relaxed max-w-sm">{description}</p>
+            <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed max-w-sm">{description}</p>
         </div>
     );
 }

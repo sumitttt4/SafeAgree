@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { Navbar } from "@/components/navbar";
 import { cn } from "@/lib/utils";
-import { Analytics } from "@vercel/analytics/react"
+import { Analytics } from "@vercel/analytics/react";
+import { ThemeProvider } from "@/components/theme-provider";
 
 const inter = Inter({
     subsets: ["latin"],
@@ -29,10 +29,17 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en" suppressHydrationWarning>
-            <body className={cn(inter.variable, "min-h-screen bg-white font-sans antialiased text-slate-900")}>
-                <main className="flex min-h-screen flex-col">
-                    {children}
-                </main>
+            <body className={cn(inter.variable, "min-h-screen bg-white dark:bg-slate-950 font-sans antialiased text-slate-900 dark:text-white transition-colors")}>
+                <ThemeProvider
+                    attribute="class"
+                    defaultTheme="system"
+                    enableSystem
+                    disableTransitionOnChange={false}
+                >
+                    <main className="flex min-h-screen flex-col">
+                        {children}
+                    </main>
+                </ThemeProvider>
                 <Analytics />
             </body>
         </html>

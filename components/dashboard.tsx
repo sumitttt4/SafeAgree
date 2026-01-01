@@ -10,6 +10,8 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { ShareButton } from "@/components/share-button";
+import { ExportButton } from "@/components/export-button";
 
 interface AnalysisResult {
     score: number;
@@ -87,9 +89,9 @@ export function Dashboard({ onReset, result }: DashboardProps) {
     const data = result || mockResult;
 
     const getScoreColor = (score: number) => {
-        if (score >= 80) return "text-green-600";
-        if (score >= 60) return "text-amber-500";
-        return "text-red-600";
+        if (score >= 80) return "text-green-600 dark:text-green-400";
+        if (score >= 60) return "text-amber-500 dark:text-amber-400";
+        return "text-red-600 dark:text-red-400";
     };
 
     const getScoreLabel = (score: number) => {
@@ -99,13 +101,13 @@ export function Dashboard({ onReset, result }: DashboardProps) {
     };
 
     const getScoreBg = (score: number) => {
-        if (score >= 80) return "from-green-50 to-green-100/50 border-green-200";
-        if (score >= 60) return "from-amber-50 to-amber-100/50 border-amber-200";
-        return "from-red-50 to-red-100/50 border-red-200";
+        if (score >= 80) return "from-green-50 to-green-100/50 border-green-200 dark:from-green-950/50 dark:to-green-900/30 dark:border-green-800";
+        if (score >= 60) return "from-amber-50 to-amber-100/50 border-amber-200 dark:from-amber-950/50 dark:to-amber-900/30 dark:border-amber-800";
+        return "from-red-50 to-red-100/50 border-red-200 dark:from-red-950/50 dark:to-red-900/30 dark:border-red-800";
     };
 
     return (
-        <div className="min-h-screen bg-slate-50">
+        <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
             <div className="w-full max-w-6xl mx-auto px-4 py-8 md:py-12 space-y-8">
 
                 {/* Header Bar */}
@@ -116,15 +118,19 @@ export function Dashboard({ onReset, result }: DashboardProps) {
                 >
                     <div className="flex items-center gap-2">
                         <img src="/logo-new.png" alt="SafeAgree" className="h-12 w-auto" />
-                        <span className="text-xl font-bold text-slate-900">SafeAgree</span>
+                        <span className="text-xl font-bold text-slate-900 dark:text-white">SafeAgree</span>
                     </div>
-                    <Button
-                        variant="outline"
-                        onClick={onReset}
-                        className="h-9 px-4 rounded-lg border-slate-200 bg-white text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-colors gap-2 text-sm shadow-sm"
-                    >
-                        <RotateCcw className="h-4 w-4" /> New Analysis
-                    </Button>
+                    <div className="flex items-center gap-2">
+                        {data && <ShareButton result={data} />}
+                        {data && <ExportButton result={data} />}
+                        <Button
+                            variant="outline"
+                            onClick={onReset}
+                            className="h-9 px-4 rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white transition-colors gap-2 text-sm shadow-sm"
+                        >
+                            <RotateCcw className="h-4 w-4" /> New Analysis
+                        </Button>
+                    </div>
                 </motion.div>
 
                 {/* Score Card */}
@@ -146,7 +152,7 @@ export function Dashboard({ onReset, result }: DashboardProps) {
                                 {getScoreLabel(data.score)}
                             </div>
                             {data.summary && (
-                                <p className="text-sm text-slate-600 mt-1 max-w-xl">{data.summary}</p>
+                                <p className="text-sm text-slate-600 dark:text-slate-300 mt-1 max-w-xl">{data.summary}</p>
                             )}
                         </div>
                     </div>
@@ -173,24 +179,24 @@ export function Dashboard({ onReset, result }: DashboardProps) {
                                 <motion.div
                                     key={i}
                                     variants={itemVariants}
-                                    className="group flex items-start gap-3 p-3 rounded-xl bg-white border border-red-100 hover:border-red-200 hover:shadow-sm transition-all cursor-default"
+                                    className="group flex items-start gap-3 p-3 rounded-xl bg-white dark:bg-slate-900 border border-red-100 dark:border-red-900/50 hover:border-red-200 dark:hover:border-red-800 hover:shadow-sm transition-all cursor-default"
                                 >
                                     <AlertTriangle className="h-4 w-4 text-red-500 shrink-0 mt-0.5" />
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center gap-2">
-                                            <span className="text-sm font-semibold text-slate-900 truncate">{flag.title}</span>
+                                            <span className="text-sm font-semibold text-slate-900 dark:text-white truncate">{flag.title}</span>
                                             {flag.severity === "high" && (
                                                 <span className="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded bg-red-100 text-red-600">
                                                     High
                                                 </span>
                                             )}
                                         </div>
-                                        <p className="text-xs text-slate-500 mt-0.5">{flag.description}</p>
+                                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{flag.description}</p>
                                     </div>
                                 </motion.div>
                             ))}
                             {data.redFlags.length === 0 && (
-                                <div className="text-sm text-slate-400 text-center py-4">No risks found</div>
+                                <div className="text-sm text-slate-400 dark:text-slate-500 text-center py-4">No risks found</div>
                             )}
                         </motion.div>
                     </div>
@@ -213,24 +219,24 @@ export function Dashboard({ onReset, result }: DashboardProps) {
                                 <motion.div
                                     key={i}
                                     variants={itemVariants}
-                                    className="group flex items-start gap-3 p-3 rounded-xl bg-white border border-green-100 hover:border-green-200 hover:shadow-sm transition-all cursor-default"
+                                    className="group flex items-start gap-3 p-3 rounded-xl bg-white dark:bg-slate-900 border border-green-100 dark:border-green-900/50 hover:border-green-200 dark:hover:border-green-800 hover:shadow-sm transition-all cursor-default"
                                 >
                                     <CheckCircle2 className="h-4 w-4 text-green-500 shrink-0 mt-0.5" />
                                     <div className="flex-1 min-w-0">
-                                        <span className="text-sm font-semibold text-slate-900 truncate block">{flag.title}</span>
-                                        <p className="text-xs text-slate-500 mt-0.5">{flag.description}</p>
+                                        <span className="text-sm font-semibold text-slate-900 dark:text-white truncate block">{flag.title}</span>
+                                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{flag.description}</p>
                                     </div>
                                 </motion.div>
                             ))}
                             {data.greenFlags.length === 0 && (
-                                <div className="text-sm text-slate-400 text-center py-4">No positives found</div>
+                                <div className="text-sm text-slate-400 dark:text-slate-500 text-center py-4">No positives found</div>
                             )}
                         </motion.div>
                     </div>
 
                     {/* GRAY COLUMN */}
                     <div className="space-y-3">
-                        <div className="flex items-center gap-2 pb-2 border-b border-slate-200">
+                        <div className="flex items-center gap-2 pb-2 border-b border-slate-200 dark:border-slate-700">
                             <div className="h-2 w-2 rounded-full bg-slate-400" />
                             <span className="text-sm font-bold text-slate-500 uppercase tracking-wider">
                                 Info ({data.grayFlags.length})
@@ -246,17 +252,17 @@ export function Dashboard({ onReset, result }: DashboardProps) {
                                 <motion.div
                                     key={i}
                                     variants={itemVariants}
-                                    className="group flex items-center justify-between gap-3 p-3 rounded-xl bg-white border border-slate-100 hover:border-slate-200 hover:shadow-sm transition-all cursor-default"
+                                    className="group flex items-center justify-between gap-3 p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-700 hover:border-slate-200 dark:hover:border-slate-600 hover:shadow-sm transition-all cursor-default"
                                 >
                                     <span className="text-xs font-medium text-slate-400 flex items-center gap-2">
                                         <Info className="h-3 w-3" />
                                         {flag.title}
                                     </span>
-                                    <span className="text-sm font-semibold text-slate-700">{flag.value}</span>
+                                    <span className="text-sm font-semibold text-slate-700 dark:text-slate-200">{flag.value}</span>
                                 </motion.div>
                             ))}
                             {data.grayFlags.length === 0 && (
-                                <div className="text-sm text-slate-400 text-center py-4">No info found</div>
+                                <div className="text-sm text-slate-400 dark:text-slate-500 text-center py-4">No info found</div>
                             )}
                         </motion.div>
                     </div>
@@ -268,9 +274,9 @@ export function Dashboard({ onReset, result }: DashboardProps) {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 1 }}
-                    className="pt-8 border-t border-slate-200 text-center"
+                    className="pt-8 border-t border-slate-200 dark:border-slate-700 text-center"
                 >
-                    <p className="text-xs text-slate-400">
+                    <p className="text-xs text-slate-400 dark:text-slate-500">
                         Analysis powered by AI • This is not legal advice
                     </p>
                 </motion.div>

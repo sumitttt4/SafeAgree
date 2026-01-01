@@ -15,7 +15,7 @@ function XIcon({ className }: { className?: string }) {
 
 export function Footer() {
     return (
-        <footer className="border-t border-slate-200 bg-white py-16">
+        <footer className="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 py-16">
             <div className="container px-4 md:px-6 mx-auto max-w-7xl">
 
                 <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
@@ -25,14 +25,14 @@ export function Footer() {
                         <div className="flex items-center gap-2">
                             <img src="/logo-new.png" alt="SafeAgree" className="h-10 w-auto" />
                         </div>
-                        <p className="text-sm text-slate-500">
-                            Built by <Link href="https://x.com/Sumitthq" target="_blank" className="font-semibold text-slate-700 hover:text-blue-600 transition-colors">Sumit Sharma</Link>
+                        <p className="text-sm text-slate-500 dark:text-slate-400">
+                            Built by <Link href="https://x.com/Sumitthq" target="_blank" className="font-semibold text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Sumit Sharma</Link>
                         </p>
                         <div className="flex items-center gap-4 pt-1">
                             <Link
                                 href="https://x.com/Sumitthq"
                                 target="_blank"
-                                className="text-slate-400 hover:text-slate-900 transition-colors"
+                                className="text-slate-400 dark:text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors"
                                 aria-label="X (Twitter)"
                             >
                                 <XIcon className="h-5 w-5" />
@@ -40,7 +40,7 @@ export function Footer() {
                             <Link
                                 href="https://github.com/sumitttt4"
                                 target="_blank"
-                                className="text-slate-400 hover:text-slate-900 transition-colors"
+                                className="text-slate-400 dark:text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors"
                                 aria-label="GitHub"
                             >
                                 <Github className="h-5 w-5" />
@@ -52,7 +52,7 @@ export function Footer() {
                     <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                         <Button
                             variant="outline"
-                            className="rounded-full bg-white border-slate-300 text-slate-700 hover:bg-pink-50 hover:text-pink-600 hover:border-pink-300 transition-all group gap-2 shadow-sm"
+                            className="rounded-full bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-pink-50 dark:hover:bg-pink-950 hover:text-pink-600 dark:hover:text-pink-400 hover:border-pink-300 dark:hover:border-pink-700 transition-all group gap-2 shadow-sm"
                             asChild
                         >
                             <Link href="https://github.com/sponsors/sumitttt4" target="_blank">
@@ -63,7 +63,7 @@ export function Footer() {
 
                         <Button
                             variant="outline"
-                            className="rounded-full bg-white border-slate-300 text-slate-700 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-300 transition-all group gap-2 shadow-sm"
+                            className="rounded-full bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-blue-950 hover:text-blue-600 dark:hover:text-blue-400 hover:border-blue-300 dark:hover:border-blue-700 transition-all group gap-2 shadow-sm"
                             asChild
                         >
                             <Link href="#hero">
@@ -75,17 +75,17 @@ export function Footer() {
                 </div>
 
                 {/* Disclaimer */}
-                <div className="mt-8 py-4 px-4 bg-slate-50 rounded-2xl border border-slate-100 text-center">
-                    <p className="text-xs text-slate-500 max-w-3xl mx-auto leading-relaxed">
-                        <span className="font-semibold text-slate-700">Disclaimer:</span> SafeAgree is an AI-powered analysis tool and does not provide professional legal advice. The scores and summaries generated are for informational purposes only. Always consult with a qualified attorney for legal matters.
+                <div className="mt-8 py-4 px-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 text-center">
+                    <p className="text-xs text-slate-500 dark:text-slate-400 max-w-3xl mx-auto leading-relaxed">
+                        <span className="font-semibold text-slate-700 dark:text-slate-300">Disclaimer:</span> SafeAgree is an AI-powered analysis tool and does not provide professional legal advice. The scores and summaries generated are for informational purposes only. Always consult with a qualified attorney for legal matters.
                     </p>
                 </div>
 
                 {/* Bottom Bar */}
-                <div className="mt-8 pt-6 border-t border-slate-100 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-400">
+                <div className="mt-8 pt-6 border-t border-slate-100 dark:border-slate-800 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-400 dark:text-slate-500">
                     <div className="flex flex-col md:flex-row gap-4 items-center">
                         <span>© 2025 SafeAgree. All rights reserved.</span>
-                        <Link href="/privacy" className="hover:text-slate-600 underline decoration-slate-300 underline-offset-2 transition-colors">
+                        <Link href="/privacy" className="hover:text-slate-600 dark:hover:text-slate-300 underline decoration-slate-300 dark:decoration-slate-600 underline-offset-2 transition-colors">
                             Privacy Policy & Terms
                         </Link>
                     </div>
@@ -95,7 +95,7 @@ export function Footer() {
                         <Link
                             href="https://x.com/Sumitthq"
                             target="_blank"
-                            className="flex items-center gap-1.5 text-slate-500 hover:text-blue-500 transition-colors font-medium border-r border-slate-200 pr-6"
+                            className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors font-medium border-r border-slate-200 dark:border-slate-700 pr-6"
                         >
                             <XIcon className="h-3.5 w-3.5" />
                             Have questions? DM me
