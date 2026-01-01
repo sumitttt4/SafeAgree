@@ -30,6 +30,7 @@
     "clsx": "^2.1.1",
     "framer-motion": "^12.23.26",
     "groq-sdk": "^0.37.0",
+    "jspdf": "^3.0.4",
     "lucide-react": "^0.562.0",
     "lz-string": "^1.5.0",
     "next": "^16.1.0",
@@ -38,6 +39,7 @@
     "pdf-parse": "^2.4.5",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
+    "react-markdown": "^10.1.0",
     "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {

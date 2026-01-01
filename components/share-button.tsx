@@ -1,9 +1,18 @@
 "use client";
 
-import { useState } from "react";
-import { Share2, Check, Link as LinkIcon } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { Share2, Check, Link as LinkIcon, Linkedin, MessageCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import LZString from "lz-string";
+
+// X (Twitter) Logo SVG Component
+function XIcon({ className }: { className?: string }) {
+    return (
+        <svg viewBox="0 0 24 24" aria-hidden="true" className={className} fill="currentColor">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+        </svg>
+    );
+}
 
 interface ShareButtonProps {
     result: {
@@ -16,52 +25,111 @@ interface ShareButtonProps {
 }
 
 export function ShareButton({ result }: ShareButtonProps) {
+    const [isOpen, setIsOpen] = useState(false);
     const [copied, setCopied] = useState(false);
+    const containerRef = useRef<HTMLDivElement>(null);
 
-    const handleShare = async () => {
+    // Close on click outside
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+                setIsOpen(false);
+            }
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
+    const generateShareUrl = () => {
+        const compressed = LZString.compressToEncodedURIComponent(JSON.stringify(result));
+        return `${window.location.origin}/share?data=${compressed}`;
+    };
+
+    const handleCopy = async () => {
         try {
-            // Compress the result data
-            const compressed = LZString.compressToEncodedURIComponent(JSON.stringify(result));
-            const shareUrl = `${window.location.origin}/share?data=${compressed}`;
-
+            const shareUrl = generateShareUrl();
             await navigator.clipboard.writeText(shareUrl);
             setCopied(true);
             setTimeout(() => setCopied(false), 2000);
+            setIsOpen(false);
         } catch (err) {
             console.error("Failed to copy:", err);
         }
     };
 
+    const handleSocialShare = (platform: 'twitter' | 'linkedin' | 'whatsapp') => {
+        const shareUrl = generateShareUrl();
+        const text = `I just analyzed a contract with SafeAgree and it got a score of ${result.score}/100! Check it out:`;
+
+        let url = '';
+        switch (platform) {
+            case 'twitter':
+                url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(shareUrl)}`;
+                break;
+            case 'linkedin':
+                url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`;
+                break;
+            case 'whatsapp':
+                url = `https://wa.me/?text=${encodeURIComponent(text + ' ' + shareUrl)}`;
+                break;
+        }
+
+        window.open(url, '_blank', 'width=600,height=400');
+        setIsOpen(false);
+    };
+
     return (
-        <button
-            onClick={handleShare}
-            className="h-9 px-4 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white transition-colors flex items-center gap-2 text-sm shadow-sm font-medium"
-        >
-            <AnimatePresence mode="wait">
-                {copied ? (
+        <div className="relative" ref={containerRef}>
+            <button
+                onClick={() => setIsOpen(!isOpen)}
+                className="h-9 px-4 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white transition-colors flex items-center gap-2 text-sm shadow-sm font-medium"
+            >
+                <Share2 className="h-4 w-4" />
+                <span>Share</span>
+            </button>
+
+            <AnimatePresence>
+                {isOpen && (
                     <motion.div
-                        key="check"
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        exit={{ scale: 0 }}
-                        className="flex items-center gap-2"
+                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                        className="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-900 rounded-xl shadow-xl border border-slate-200 dark:border-slate-800 p-1 z-50 origin-top-right"
                     >
-                        <Check className="h-4 w-4 text-green-500" />
-                        <span className="text-green-600 dark:text-green-400">Copied!</span>
-                    </motion.div>
-                ) : (
-                    <motion.div
-                        key="share"
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        exit={{ scale: 0 }}
-                        className="flex items-center gap-2"
-                    >
-                        <Share2 className="h-4 w-4" />
-                        <span>Share</span>
+                        <div className="flex flex-col gap-1">
+                            <button
+                                onClick={() => handleSocialShare('twitter')}
+                                className="flex items-center gap-3 w-full px-3 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors text-left"
+                            >
+                                <XIcon className="h-4 w-4" />
+                                X (Twitter)
+                            </button>
+                            <button
+                                onClick={() => handleSocialShare('linkedin')}
+                                className="flex items-center gap-3 w-full px-3 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors text-left"
+                            >
+                                <Linkedin className="h-4 w-4" />
+                                LinkedIn
+                            </button>
+                            <button
+                                onClick={() => handleSocialShare('whatsapp')}
+                                className="flex items-center gap-3 w-full px-3 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors text-left"
+                            >
+                                <MessageCircle className="h-4 w-4" />
+                                WhatsApp
+                            </button>
+                            <div className="h-px bg-slate-100 dark:bg-slate-800 my-1" />
+                            <button
+                                onClick={handleCopy}
+                                className="flex items-center gap-3 w-full px-3 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors text-left"
+                            >
+                                {copied ? <Check className="h-4 w-4 text-green-500" /> : <LinkIcon className="h-4 w-4" />}
+                                {copied ? "Copied!" : "Copy Link"}
+                            </button>
+                        </div>
                     </motion.div>
                 )}
             </AnimatePresence>
-        </button>
+        </div>
     );
 }

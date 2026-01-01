@@ -133,8 +133,8 @@ export function Hero({ onAnalyze, error }: HeroProps) {
                                     className="absolute top-1 bottom-1 rounded-full bg-[#FDE047] shadow-sm"
                                     initial={false}
                                     animate={{
-                                        left: mode === "link" ? "4px" : mode === "text" ? "33.33%" : "66.66%",
-                                        right: mode === "link" ? "66.66%" : mode === "text" ? "33.33%" : "4px",
+                                        left: mode === "link" ? "4px" : "50%",
+                                        right: mode === "link" ? "50%" : "4px",
                                     }}
                                     transition={{ type: "spring", stiffness: 400, damping: 30 }}
                                 />
@@ -159,7 +159,7 @@ export function Hero({ onAnalyze, error }: HeroProps) {
                                     <FileText className="w-4 h-4" />
                                     Text
                                 </button>
-                                <button
+                                {/* <button
                                     onClick={() => setMode("file")}
                                     className={cn(
                                         "relative z-10 flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold transition-colors",
@@ -168,7 +168,7 @@ export function Hero({ onAnalyze, error }: HeroProps) {
                                 >
                                     <Upload className="w-4 h-4" />
                                     PDF
-                                </button>
+                                </button> */}
                             </div>
                         </div>
 

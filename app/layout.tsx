@@ -12,13 +12,21 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+    metadataBase: new URL("https://safeagree.tech"),
     title: "SafeAgree | AI-Powered Contact & Terms Analysis",
     description: "Don't just click 'I Agree'. SafeAgree scans Terms of Service, Privacy Policies, and Contracts in seconds to find hidden risks using Gemini 3 Pro.",
     keywords: ["Terms of Service", "AI Legal Assistant", "Privacy Policy Scanner", "Contract Analysis", "SafeAgree"],
     openGraph: {
         title: "SafeAgree - Know what you sign.",
         description: "Instantly find hidden traps in any contract or Terms of Service.",
+        url: "https://safeagree.tech",
+        siteName: "SafeAgree",
         type: "website",
+    },
+    twitter: {
+        card: "summary_large_image",
+        site: "@Sumitthq",
+        creator: "@Sumitthq",
     }
 };
 

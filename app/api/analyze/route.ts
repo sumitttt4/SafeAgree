@@ -34,7 +34,7 @@ Guidelines:
 - Red Flags: Data selling, arbitration clauses, perpetual licenses, hidden fees, difficult cancellation
 - Green Flags: GDPR compliance, easy deletion, refund policies, encryption, data portability
 - Gray Flags: "Contact" (email/link), "Jurisdiction", "Age", "Notice Period". Keep values SHORT.
-- Be concise but specific
+- Be concise but specific. USE SIMPLE HUMAN LANGUAGE. Avoid legalese.
 - Score 80-100 = Safe, 60-79 = Caution, 0-59 = Risky
 - Respond ONLY with valid JSON. No markdown, no explanations.`;
 
@@ -297,6 +297,8 @@ export async function POST(req: NextRequest) {
     }
 
     const analysis = JSON.parse(jsonMatch[0]);
+    // Add full text to the response for Chat Context
+    analysis.fullText = content;
     return NextResponse.json(analysis);
 
   } catch (error) {

@@ -126,7 +126,7 @@ export default function Home() {
             />
 
             <div className="relative z-10">
-                <Navbar onReset={handleReset} />
+                {!showDashboard && <Navbar onReset={handleReset} />}
                 {/* Loading Overlay */}
                 <AnimatePresence>
                     {isAnalyzing && (
@@ -164,8 +164,6 @@ export default function Home() {
                             animate={{ opacity: 1 }}
                             transition={{ duration: 0.5 }}
                         >
-                            {/* Spacer for fixed navbar */}
-                            <div className="pt-24" />
                             <Dashboard onReset={handleReset} result={analysisResult} />
                         </motion.div>
                     )}
@@ -177,11 +175,11 @@ export default function Home() {
                 href="https://sumitsharmaa.me"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="fixed bottom-4 right-4 z-50 inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-900 rounded-full border border-slate-200 dark:border-slate-700 shadow-lg hover:shadow-xl hover:scale-105 transition-all"
+                className="fixed bottom-4 right-4 z-50 inline-flex items-center gap-1.5 px-2 py-1 sm:px-3 sm:py-1.5 bg-white dark:bg-slate-900 rounded-full border border-slate-200 dark:border-slate-700 shadow-lg hover:shadow-xl hover:scale-105 transition-all"
             >
-                <div className="h-2 w-2 rounded-full bg-green-500" />
-                <span className="text-sm font-medium text-slate-700 dark:text-slate-300">Made by Sumit</span>
+                <div className="h-1.5 w-1.5 rounded-full bg-green-500" />
+                <span className="text-[10px] sm:text-xs font-medium text-slate-700 dark:text-slate-300">Made by Sumit</span>
             </a>
-        </div>
+        </div >
     );
 }

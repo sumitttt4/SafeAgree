@@ -12,6 +12,9 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ShareButton } from "@/components/share-button";
 import { ExportButton } from "@/components/export-button";
+import { ChatInterface, ChatButton } from "@/components/chat-interface";
+import { AnimatePresence } from "framer-motion";
+import { useState } from "react";
 
 interface AnalysisResult {
     score: number;
@@ -29,6 +32,7 @@ interface AnalysisResult {
         title: string;
         value: string;
     }>;
+    fullText?: string;
 }
 
 interface DashboardProps {
@@ -86,6 +90,7 @@ const mockResult: AnalysisResult = {
 };
 
 export function Dashboard({ onReset, result }: DashboardProps) {
+    const [showChat, setShowChat] = useState(false);
     const data = result || mockResult;
 
     const getScoreColor = (score: number) => {
@@ -107,7 +112,7 @@ export function Dashboard({ onReset, result }: DashboardProps) {
     };
 
     return (
-        <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
+        <div className="min-h-screen bg-transparent">
             <div className="w-full max-w-6xl mx-auto px-4 py-8 md:py-12 space-y-8">
 
                 {/* Header Bar */}
@@ -144,15 +149,19 @@ export function Dashboard({ onReset, result }: DashboardProps) {
                     )}
                 >
                     <div className="flex items-center gap-6">
-                        <div className={cn("text-6xl font-bold tabular-nums", getScoreColor(data.score))}>
-                            {data.score}
-                        </div>
-                        <div>
-                            <div className={cn("text-2xl font-bold", getScoreColor(data.score))}>
-                                {getScoreLabel(data.score)}
+                        <div className="flex-1">
+                            <div className="flex items-baseline gap-4">
+                                <span className={cn("text-6xl font-bold tabular-nums", getScoreColor(data.score))}>
+                                    {data.score}
+                                </span>
+                                <span className={cn("text-2xl font-bold", getScoreColor(data.score))}>
+                                    {getScoreLabel(data.score)}
+                                </span>
                             </div>
                             {data.summary && (
-                                <p className="text-sm text-slate-600 dark:text-slate-300 mt-1 max-w-xl">{data.summary}</p>
+                                <p className="text-sm text-slate-600 dark:text-slate-300 mt-2 max-w-2xl text-balance leading-relaxed">
+                                    {data.summary}
+                                </p>
                             )}
                         </div>
                     </div>
@@ -281,7 +290,26 @@ export function Dashboard({ onReset, result }: DashboardProps) {
                     </p>
                 </motion.div>
 
+                {/* Chat Interface */}
+                <AnimatePresence>
+                    {showChat && (
+                        <ChatInterface
+                            onClose={() => setShowChat(false)}
+                            context={
+                                data.fullText
+                                || JSON.stringify({
+                                    summary: data.summary,
+                                    risks: data.redFlags,
+                                    positives: data.greenFlags
+                                })
+                            }
+                        />
+                    )}
+                </AnimatePresence>
             </div>
+            {!showChat && (
+                <ChatButton onClick={() => setShowChat(true)} />
+            )}
         </div>
     );
 }
