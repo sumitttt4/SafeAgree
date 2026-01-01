@@ -144,9 +144,11 @@ export function ChatInterface({ context, onClose }: ChatInterfaceProps) {
                                 ? "bg-slate-900 text-white dark:bg-white dark:text-slate-900 rounded-tr-sm"
                                 : "bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 rounded-tl-sm"
                         )}>
-                            <ReactMarkdown className="prose prose-sm dark:prose-invert max-w-none">
-                                {msg.content}
-                            </ReactMarkdown>
+                            <div className="prose prose-sm dark:prose-invert max-w-none">
+                                <ReactMarkdown>
+                                    {msg.content}
+                                </ReactMarkdown>
+                            </div>
                         </div>
                     </motion.div>
                 ))}
