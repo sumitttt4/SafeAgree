@@ -79,22 +79,7 @@ export function Hero({ onAnalyze, error }: HeroProps) {
     };
 
     return (
-        <section id="hero" className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden pt-24 lg:pt-32 pb-20 text-center bg-white dark:bg-slate-950">
-
-            {/* Circuit Board - Light Pattern */}
-            <div
-                className="absolute inset-0 z-0 pointer-events-none [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"
-                style={{
-                    backgroundImage: `
-                        repeating-linear-gradient(0deg, transparent, transparent 19px, rgba(75, 85, 99, 0.08) 19px, rgba(75, 85, 99, 0.08) 20px, transparent 20px, transparent 39px, rgba(75, 85, 99, 0.08) 39px, rgba(75, 85, 99, 0.08) 40px),
-                        repeating-linear-gradient(90deg, transparent, transparent 19px, rgba(75, 85, 99, 0.08) 19px, rgba(75, 85, 99, 0.08) 20px, transparent 20px, transparent 39px, rgba(75, 85, 99, 0.08) 39px, rgba(75, 85, 99, 0.08) 40px),
-                        radial-gradient(circle at 20px 20px, rgba(55, 65, 81, 0.12) 2px, transparent 2px),
-                        radial-gradient(circle at 40px 40px, rgba(55, 65, 81, 0.12) 2px, transparent 2px)
-                    `,
-                    backgroundSize: '40px 40px, 40px 40px, 40px 40px, 40px 40px',
-                }}
-            />
-
+        <section id="hero" className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden pt-24 lg:pt-32 pb-20 text-center">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 relative z-10">
                 <motion.div
                     initial={{ opacity: 0, y: 10 }}

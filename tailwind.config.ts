@@ -63,6 +63,9 @@ const config: Config = {
             fontFamily: {
                 sans: ['var(--font-inter)', 'sans-serif'],
             },
+            backgroundImage: {
+                'gradient-radial': 'radial-gradient(ellipse at top right, var(--tw-gradient-stops))',
+            },
         }
     },
     plugins: [require("tailwindcss-animate")],

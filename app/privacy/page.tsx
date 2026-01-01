@@ -120,6 +120,15 @@ export default function PrivacyTerms() {
                 {/* Contact */}
 
 
+                {/* Disclaimer */}
+                <section className="space-y-4">
+                    <div className="p-6 bg-amber-50 dark:bg-amber-950/30 rounded-xl border border-amber-200 dark:border-amber-900/50">
+                        <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+                            <span className="font-bold text-amber-800 dark:text-amber-300">Disclaimer:</span> SafeAgree is an AI-powered analysis tool and does not provide professional legal advice. The scores and summaries generated are for informational purposes only. Always consult with a qualified attorney for legal matters.
+                        </p>
+                    </div>
+                </section>
+
                 <div className="flex justify-center pb-20">
                     <Link href="/">
                         <Button className="rounded-full px-8 bg-slate-900 text-white hover:bg-slate-800 border-none shadow-lg shadow-slate-200 h-10">

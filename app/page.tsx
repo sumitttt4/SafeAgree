@@ -99,19 +99,29 @@ export default function Home() {
     };
 
     return (
-        <div className="min-h-screen bg-white dark:bg-slate-950 relative">
-            {/* Diagonal Stripes Background */}
+        <div className="min-h-screen bg-[#faf9f6] dark:bg-[#0a0a0a] relative">
+            {/* Paper Texture - Light Mode Only */}
             <div
-                className="absolute inset-0 z-0 pointer-events-none"
+                className="absolute inset-0 z-0 pointer-events-none dark:hidden"
                 style={{
-                    backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 2px, #f3f4f6 2px, #f3f4f6 4px)",
+                    backgroundImage: `
+                        radial-gradient(circle at 1px 1px, rgba(0,0,0,0.08) 1px, transparent 0),
+                        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.02) 2px, rgba(0,0,0,0.02) 4px),
+                        repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,0,0,0.02) 2px, rgba(0,0,0,0.02) 4px)
+                    `,
+                    backgroundSize: "8px 8px, 32px 32px, 32px 32px",
                 }}
             />
-            {/* Dark mode stripes */}
+
+            {/* Dark Dot Matrix - Dark Mode Only */}
             <div
                 className="absolute inset-0 z-0 pointer-events-none hidden dark:block"
                 style={{
-                    backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(30,41,59,0.5) 2px, rgba(30,41,59,0.5) 4px)",
+                    backgroundImage: `
+                        radial-gradient(circle at 25% 25%, #222222 0.5px, transparent 1px),
+                        radial-gradient(circle at 75% 75%, #111111 0.5px, transparent 1px)
+                    `,
+                    backgroundSize: "10px 10px",
                 }}
             />
 
@@ -161,6 +171,17 @@ export default function Home() {
                     )}
                 </AnimatePresence>
             </div>
+
+            {/* Fixed "Made by Sumit" Badge - Bottom Right Corner */}
+            <a
+                href="https://sumitsharmaa.me"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="fixed bottom-4 right-4 z-50 inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-900 rounded-full border border-slate-200 dark:border-slate-700 shadow-lg hover:shadow-xl hover:scale-105 transition-all"
+            >
+                <div className="h-2 w-2 rounded-full bg-green-500" />
+                <span className="text-sm font-medium text-slate-700 dark:text-slate-300">Made by Sumit</span>
+            </a>
         </div>
     );
 }
