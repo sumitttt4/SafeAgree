@@ -45,7 +45,7 @@ export default function PricingPage() {
                             <li className="flex items-center gap-3 text-sm"><CheckCircle2 className="w-5 h-5 text-blue-500" /> Limited Chat Context</li>
                         </ul>
                         <Button variant="outline" className="w-full border-neutral-700 hover:bg-neutral-800" asChild>
-                            <Link href="/dashboard">Go to Dashboard</Link>
+                            <Link href="/#hero">Start Free</Link>
                         </Button>
                     </div>
 

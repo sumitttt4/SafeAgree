@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Hero } from "@/components/hero";
 import { FeatureSection } from "@/components/feature-section";
 import { Dashboard } from "@/components/dashboard";
-import { ComparisonSection } from "@/components/comparison-section";
+
 import { Footer } from "@/components/footer";
 import { Navbar } from "@/components/navbar";
 import { PricingSection } from "@/components/pricing-section";
@@ -153,9 +153,9 @@ export default function Home() {
                             exit={{ opacity: 0, y: -20 }}
                             transition={{ duration: 0.5 }}
                         >
-                            <Hero onAnalyze={handleAnalyze} error={error} />
+                            <Hero onAnalyze={handleAnalyze} error={error} isAnalyzing={isAnalyzing} />
                             <FeatureSection />
-                            <ComparisonSection />
+
                             <PricingSection />
                             <Footer />
                         </motion.div>
