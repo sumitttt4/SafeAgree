@@ -26,7 +26,7 @@ export function Hero({ onAnalyze, error, isAnalyzing }: HeroProps) {
     const [showVideo, setShowVideo] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const charCount = text.length;
+    const charCount = (text || "").length;
     const charPercentage = (charCount / MAX_CHARS) * 100;
 
     const handleClear = () => {
@@ -141,7 +141,7 @@ export function Hero({ onAnalyze, error, isAnalyzing }: HeroProps) {
                             ) : (
                                 <input
                                     type="text"
-                                    value={text} // Using input instead of textarea for one-line clean look, user can paste 
+                                    value={text || ""} // Using input instead of textarea for one-line clean look, user can paste 
                                     onChange={(e) => setText(e.target.value)}
                                     onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
                                     placeholder="Paste text snippet here..."
