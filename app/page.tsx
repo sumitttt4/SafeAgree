@@ -8,6 +8,7 @@ import { Dashboard } from "@/components/dashboard";
 import { ComparisonSection } from "@/components/comparison-section";
 import { Footer } from "@/components/footer";
 import { Navbar } from "@/components/navbar";
+import { PricingSection } from "@/components/pricing-section";
 import { Loader2 } from "lucide-react";
 
 interface AnalysisResult {
@@ -155,6 +156,7 @@ export default function Home() {
                             <Hero onAnalyze={handleAnalyze} error={error} />
                             <FeatureSection />
                             <ComparisonSection />
+                            <PricingSection />
                             <Footer />
                         </motion.div>
                     ) : (
