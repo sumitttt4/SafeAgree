@@ -3,7 +3,7 @@ import { Shield, AlertTriangle, Loader2, Info, FileText, MessageSquare, History,
 import ReactMarkdown from 'react-markdown';
 
 type Tab = 'scan' | 'chat' | 'history';
-const FREE_LIMIT = 3;
+const FREE_LIMIT = 5000;
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<Tab>('scan');
@@ -246,67 +246,71 @@ export default function App() {
     )
   }
 
-  // === MAIN UI === (Same as before, just verify header)
+  // === MAIN UI ===
   return (
-    <div className="w-full h-screen flex flex-col bg-slate-950 text-slate-100 font-sans selection:bg-blue-500/30">
+    <div className="w-full h-screen flex flex-col bg-gradient-to-br from-slate-950 via-[#0B1120] to-slate-950 text-slate-100 font-sans selection:bg-blue-500/30 overflow-hidden relative">
+      {/* Background Ambience */}
+      <div className="absolute top-0 left-0 right-0 h-40 bg-blue-500/5 blur-[80px] pointer-events-none"></div>
 
       {/* Glass Header */}
-      <header className="bg-slate-950/80 backdrop-blur-xl border-b border-slate-800/60 p-3 flex items-center justify-between shrink-0 sticky top-0 z-50">
+      <header className="bg-slate-950/60 backdrop-blur-xl border-b border-white/5 p-3 flex items-center justify-between shrink-0 sticky top-0 z-50">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 bg-blue-600/20 rounded-lg flex items-center justify-center border border-blue-500/20">
-            <img src="/icon-32.png" alt="Logo" className="w-5 h-5 drop-shadow-sm" />
+          <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center shadow-lg shadow-blue-500/20">
+            <img src="/icon-32.png" alt="Logo" className="w-5 h-5 drop-shadow-sm brightness-150" />
           </div>
           <div>
             <div className="flex items-center gap-1.5">
-              <span className="font-bold tracking-tight text-sm block leading-none mb-0.5">SafeAgree</span>
+              <span className="font-bold tracking-tight text-sm block leading-none mb-0.5 text-white">SafeAgree</span>
               {isPro && <span className="bg-yellow-500/20 text-yellow-500 text-[9px] font-black px-1 rounded uppercase tracking-wider border border-yellow-500/20">Pro</span>}
             </div>
             {!isPro && (
-              <span className="text-[10px] text-slate-500 font-medium bg-slate-900 px-1.5 py-0.5 rounded-md border border-slate-800">
-                {scansToday}/{FREE_LIMIT} Free
+              <span className="text-[10px] text-slate-500 font-medium px-0">
+                Extension • v1.0
               </span>
             )}
           </div>
         </div>
-        <nav className="flex gap-1 bg-slate-900/80 p-1 rounded-lg border border-slate-800/50">
-          <button onClick={() => setActiveTab('scan')} className={`p-1.5 rounded-md transition-all duration-300 ${activeTab === 'scan' ? 'bg-slate-800 text-white shadow-sm' : 'text-slate-500 hover:text-slate-300'}`} title="Scan">
+        <nav className="flex gap-1 bg-white/5 p-1 rounded-lg border border-white/5">
+          <button onClick={() => setActiveTab('scan')} className={`p-1.5 rounded-md transition-all duration-300 ${activeTab === 'scan' ? 'bg-slate-800 text-white shadow-sm ring-1 ring-white/10' : 'text-slate-500 hover:text-slate-300'}`} title="Scan">
             <Shield className="w-4 h-4" />
           </button>
-          <button onClick={() => setActiveTab('chat')} className={`p-1.5 rounded-md transition-all duration-300 ${activeTab === 'chat' ? 'bg-slate-800 text-white shadow-sm' : 'text-slate-500 hover:text-slate-300'}`} title="Chat">
+          <button onClick={() => setActiveTab('chat')} className={`p-1.5 rounded-md transition-all duration-300 ${activeTab === 'chat' ? 'bg-slate-800 text-white shadow-sm ring-1 ring-white/10' : 'text-slate-500 hover:text-slate-300'}`} title="Chat">
             <MessageSquare className="w-4 h-4" />
           </button>
-          <button onClick={() => setActiveTab('history')} className={`p-1.5 rounded-md transition-all duration-300 ${activeTab === 'history' ? 'bg-slate-800 text-white shadow-sm' : 'text-slate-500 hover:text-slate-300'}`} title="History">
+          <button onClick={() => setActiveTab('history')} className={`p-1.5 rounded-md transition-all duration-300 ${activeTab === 'history' ? 'bg-slate-800 text-white shadow-sm ring-1 ring-white/10' : 'text-slate-500 hover:text-slate-300'}`} title="History">
             <History className="w-4 h-4" />
           </button>
         </nav>
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 overflow-y-auto custom-scrollbar p-5">
+      <main className="flex-1 overflow-y-auto custom-scrollbar p-5 relative z-10">
 
         {/* === SCAN TAB === */}
         {activeTab === 'scan' && (
           <>
             {status === 'idle' && (
-              <div className="flex flex-col items-center justify-center h-full text-center fade-in">
-                <div className="w-24 h-24 bg-gradient-to-b from-slate-900 to-slate-950 rounded-3xl flex items-center justify-center mb-8 shadow-inner ring-1 ring-white/5 relative group">
-                  <div className="absolute inset-0 bg-blue-500/10 rounded-3xl blur-xl group-hover:bg-blue-500/20 transition-all duration-500"></div>
-                  <Shield className="w-10 h-10 text-blue-500 relative z-10" />
+              <div className="flex flex-col items-center justify-center h-full text-center fade-in pb-10">
+                <div className="relative mb-8 group cursor-pointer" onClick={scanPage}>
+                  <div className="absolute inset-0 bg-blue-500/20 rounded-full blur-2xl group-hover:bg-blue-500/30 transition-all duration-500 opacity-50"></div>
+                  <div className="w-28 h-28 bg-gradient-to-b from-slate-800 to-slate-950 rounded-[2rem] flex items-center justify-center shadow-2xl ring-1 ring-white/10 relative z-10 group-hover:scale-105 transition-transform duration-300">
+                    <Shield className="w-12 h-12 text-blue-500 drop-shadow-[0_0_15px_rgba(59,130,246,0.5)]" />
+                  </div>
                 </div>
 
-                <h2 className="text-xl font-bold text-white mb-2">Analyzing Agreements</h2>
-                <p className="text-slate-400 text-xs mb-8 max-w-[200px] leading-relaxed">
-                  Detect 12+ types of hidden risks instantly.
+                <h2 className="text-2xl font-bold text-white mb-2 tracking-tight">Stay Safe Online</h2>
+                <p className="text-slate-400 text-sm mb-8 max-w-[220px] leading-relaxed">
+                  Instantly analyze Terms & Privacy Policies for hidden risks.
                 </p>
 
                 <button
                   onClick={scanPage}
-                  className="group relative inline-flex h-12 w-full max-w-[200px] items-center justify-center overflow-hidden rounded-xl bg-blue-600 font-medium text-white shadow-lg transition-all duration-300 hover:bg-blue-500 hover:scale-[1.02] hover:shadow-blue-500/25"
+                  className="group relative inline-flex h-12 w-full max-w-[220px] items-center justify-center overflow-hidden rounded-xl bg-blue-600 font-bold text-white shadow-[0_0_20px_rgba(37,99,235,0.3)] transition-all duration-300 hover:bg-blue-500 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(37,99,235,0.5)]"
                 >
                   <span className="flex items-center gap-2 relative z-10">
-                    <FileText className="w-4 h-4" /> Analyze Now
+                    <FileText className="w-4 h-4" /> Analyze Page
                   </span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
                 </button>
               </div>
             )}
