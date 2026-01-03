@@ -12,9 +12,9 @@ Analyze the provided text and return a JSON response. Respond ONLY with valid JS
   "redFlags": [
     {
       "title": "<short title>",
-      "description": "<detailed explanation of the risk>",
+      "description": "<detailed explanation of the risk, citing specific section numbers if possible. Explain WHY it matters to the user.>",
       "severity": "<high|medium>",
-      "quote": "<exact short quote from text if available>"
+      "quote": "<exact short quote from text matches the risk>"
     }
   ],
   "greenFlags": [
@@ -32,12 +32,13 @@ Analyze the provided text and return a JSON response. Respond ONLY with valid JS
 }
 
 Guidelines:
+- DETAILED ANALYSIS: Do not be vague. Instead of "They sell data", say "Section 4.2 states they share email addresses with 3rd party advertisers".
 - PRIVACY POLICIES: Look for data sale, extensive tracking, third-party sharing, indefite data retention, and lack of deletion rights.
 - TERMS OF SERVICE: Look for forced arbitration, class action waivers, perpetual licenses, hidden fees, and account termination without cause.
 - Red Flags: Data selling, arbitration clauses, perpetual licenses, hidden fees, difficult cancellation, aggressive tracking.
 - Green Flags: GDPR compliance, easy deletion, refund policies, encryption, data portability, clear privacy commitments.
 - Gray Flags: "Contact" (email/link), "Jurisdiction", "Age", "Notice Period". Keep values SHORT.
-- Be concise but specific. USE SIMPLE HUMAN LANGUAGE. Avoid legalese.
+- Be concise but specific. USE SIMPLE CIVILIAN LANGUAGE. Avoid legalese, but cite the source.
 - Score 80-100 = Safe, 60-79 = Caution, 0-59 = Risky
 - Respond ONLY with valid JSON. No markdown, no explanations.`;
 

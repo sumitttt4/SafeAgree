@@ -23,6 +23,7 @@ interface AnalysisResult {
         title: string;
         description: string;
         severity?: string;
+        quote?: string;
     }>;
     greenFlags: Array<{
         title: string;
@@ -200,7 +201,16 @@ export function Dashboard({ onReset, result }: DashboardProps) {
                                                 </span>
                                             )}
                                         </div>
-                                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{flag.description}</p>
+                                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed">{flag.description}</p>
+                                        {/* Quote Preview */}
+                                        {flag.quote && (
+                                            <div className="mt-2 pt-2 border-t border-red-50 dark:border-red-900/30 flex items-start gap-1.5">
+                                                <div className="text-red-400/50 text-[10px] mt-0.5">❝</div>
+                                                <div className="text-[10px] text-red-500/80 italic leading-snug">
+                                                    {flag.quote}
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
                                 </motion.div>
                             ))}
